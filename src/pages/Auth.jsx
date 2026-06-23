@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Auth() {
-    const [mode, setMode] = useState("signup")
+    const [searchParams] = useSearchParams()
+    const [mode, setMode] = useState(searchParams.get("mode") === "login" ? "login" : "signup")
     const [error, setError] = useState(null)
 
     const navigate = useNavigate()
@@ -40,7 +41,7 @@ export default function Auth() {
             <div className="container">
                 <div className="auth-container">
                     <h1 className="page-title">
-                        {mode === "singup" ? "Sing Up" : "Login"}
+                        {mode === "signup" ? "Sign Up" : "Login"}
                     </h1>
                     <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
 
@@ -66,15 +67,15 @@ export default function Auth() {
                                 className="form-input"
                                 type="password"
                                 id="password"
-                                {...register('password', { 
-                                    required: "Password is required", 
+                                {...register('password', {
+                                    required: "Password is required",
                                     minLength: {
                                         value: 6,
                                         message: "Password must be at least 6 characters"
                                     },
                                     maxLength: {
                                         value: 12,
-                                        message: "Pasword must be less than 12 characters"
+                                        message: "Password must be less than 12 characters"
                                     }
                                 })}
                             />
@@ -82,11 +83,11 @@ export default function Auth() {
                         </div>
 
                         <button className="btn btn-primary btn-large" type="submit">
-                            {mode === "singup" ? "Sing Up" : "Login"}
+                            {mode === "signup" ? "Sign Up" : "Login"}
                         </button>
                     </form>
                     <div className="auth-switch-div">
-                       {mode === "singup" ? (
+                       {mode === "signup" ? (
                             <p>
                                 Already have an account?{" "}
                                 <span className="auth-link" onClick={() => setMode("login")}>Login</span>
@@ -95,7 +96,7 @@ export default function Auth() {
                             <p>
                                 {" "}
                                 Don't have an account? {" "}
-                                <span className="auth-link" onClick={() => setMode("singup")}>Sing Up</span>
+                                <span className="auth-link" onClick={() => setMode("signup")}>Sign Up</span>
                             </p>
                        )}
                     </div>
